@@ -11,3 +11,7 @@ class Figure(ABC):
     @abstractmethod
     def move(self, x, y):
         ...
+
+    def give_informations(self):
+        return (self.location_x, self.location_y), self.color
+

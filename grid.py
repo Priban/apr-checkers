@@ -36,5 +36,6 @@ class Grid:
 
       print("  -------------------")
 
+
     def fill_in_figures(self):
       self._array[3][5] = "x"
