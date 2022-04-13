@@ -12,6 +12,7 @@ class Figure(ABC):
     def move(self, x, y):
         ...
 
-    def give_informations(self):
-        return (self.location_x, self.location_y), self.color
-
+    def give_information(self):
+        return {"location": (self.location_x, self.location_y),
+                "color": self.color
+        }
