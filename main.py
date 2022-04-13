@@ -1,4 +1,5 @@
 from grid import Grid
+from game import Game
 from figure import Figure
 from rock import Rock
 from queen import Queen
@@ -18,3 +19,6 @@ grid.draw([
     {"location": (1, 7), "color": 0},
     rock_1.give_informations()
 ])
+
+game = Game()
+game.start()

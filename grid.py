@@ -21,15 +21,19 @@ class Grid:
     def draw(self, figures):
       print("    1 2 3 4 5 6 7 8")
       print("  -------------------")
+      
       for i in range(len(self._array)):
         radek = str(i + 1) + " |"
+
         for j in range(len(self._array)):
           if (i, j) in map(lambda f: f["location"], figures):
             figure_color = list(filter(lambda f: f["location"] == (i, j), figures))[0]["color"]
             radek += " " + ("x" if figure_color == 0 else "o")
           else:
             radek += "  "
+
         print(radek + " |")
+
       print("  -------------------")
 
 
