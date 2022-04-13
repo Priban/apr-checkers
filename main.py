@@ -1,4 +1,6 @@
 from grid import Grid
+from game import Game
+
 
 grid = Grid(8)
 grid.draw([
@@ -8,3 +10,6 @@ grid.draw([
     {"location": (7, 7), "color": 1},
     {"location": (1, 7), "color": 0}
 ])
+
+game = Game()
+game.start()
