@@ -1,3 +1,7 @@
+from re import S
+from rock import Rock
+from queen import Queen
+
 class Graphics:
 
   ROCK_TYPE_A = "x"
@@ -5,8 +9,8 @@ class Graphics:
   QUEEN_TYPE_A = "X"
   QUEEN_TYPE_B = "O"
 
-  @staticmethod
-  def draw(grid):
+  @classmethod
+  def draw(self, grid):
     print("    1 2 3 4 5 6 7 8")
     print("  -------------------")
 
@@ -14,12 +18,13 @@ class Graphics:
       radek = str(i + 1) + " |"
 
       for j in range(len(grid)):
-        print(type(grid[i][j]))
-                # if (i, j) in map(lambda f: f["location"], figures):
-                #   figure_color = list(filter(lambda f: f["location"] == (i, j), figures))[0]["color"]
-                #   radek += " " + ("x" if figure_color == 0 else "o")
-                # else:
-                #   radek += "  "
+        radek += " "
+        if isinstance(grid[i][j], Rock):
+          radek +=  self.ROCK_TYPE_A if grid[i][j].color else self.ROCK_TYPE_B
+        elif isinstance(grid[i][j], Queen):
+          radek +=  self.QUEEN_TYPE_A if grid[i][j].color else self.QUEEN_TYPE_B
+        else:
+          radek += " "
 
       print(radek + " |")
 
