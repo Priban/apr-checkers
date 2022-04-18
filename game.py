@@ -1,6 +1,7 @@
 
 from graphics import Graphics
 from rock import Rock
+from queen import Queen
 
 class Game():
 
@@ -31,3 +32,4 @@ class Game():
         for j in range(8):
           if (i + j) % 2 == 0:
             self._grid[i][j] = Rock(i, j, 1)
+      self._grid[4][1] = Queen(i, j, 1)

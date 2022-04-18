@@ -27,5 +27,4 @@ class Graphics:
           radek += " "
 
       print(radek + " |")
-
     print("  -------------------")
