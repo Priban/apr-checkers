@@ -13,9 +13,10 @@ class Game():
         self._highlighted = None
 
     def start(self):
+        print("zadávej pozice ve formátu např. '1 3'")
         while not self._game_over:
-            self.update()
             self.draw()
+            self.update()
 
     def update(self):
         print("update")
