@@ -2,8 +2,8 @@ from figure import Figure
 
 class Queen(Figure):
 
-    def __init__(self, x, y, color):
-        super().__init__(x, y, color)
+    def __init__(self, color):
+        super().__init__(color)
 
     def move(self):
         pass

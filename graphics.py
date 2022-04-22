@@ -22,12 +22,12 @@ class Graphics:
                 radek += " "
                 if isinstance(grid[i][j], Rock):
                     radek += colored(
-                        self.ROCK_TYPE_A if grid[i][j].color else self.ROCK_TYPE_B,
+                        self.ROCK_TYPE_A if grid[i][j]._color else self.ROCK_TYPE_B,
                         "green" if grid[i][j] == highlighted else "white"
                     )
                 elif isinstance(grid[i][j], Queen):
                     radek += colored(
-                        self.QUEEN_TYPE_A if grid[i][j].color else self.QUEEN_TYPE_B,
+                        self.QUEEN_TYPE_A if grid[i][j]._color else self.QUEEN_TYPE_B,
                         "green" if grid[i][j] == highlighted else "white"
                     )
                 else:

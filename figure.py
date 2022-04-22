@@ -2,22 +2,24 @@ from abc import ABC, abstractmethod
 
 class Figure(ABC):
 
-    def __init__(self, x, y, color):
-        self.x = x
-        self.y = y
-        self.color = color
+    def __init__(self, color):
+        self._color = color
 
     
     def move(self, x, y, board):
-        if self.move_is_valid(x, y):
+        if self.move_is_valid(x, y, board):
+            (previous_x, previous_y) = self.get_position(board)
+            board[previous_x][previous_y] = None
             board[x][y] = self
+            print("ahoj")
 
     @abstractmethod
     def move_is_valid(self, x, y, board):
         return
 
-    def get_information(self):
-        return {
-            "location": (self.location_x, self.location_y),
-            "color": self.color
-        }
+    def get_position(self, board):
+        for i in range(8):
+            for j in range(8):
+                if board[i][j] == self: return (i, j)
+
+        
