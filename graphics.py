@@ -12,7 +12,7 @@ class Graphics:
 
     @classmethod
     def draw(self, grid, highlighted):
-        print("    1 2 3 4 5 6 7 8")
+        print("    a b c d e f g h")
         print("  -------------------")
 
         for i in range(len(grid)):
@@ -35,3 +35,4 @@ class Graphics:
 
             print(radek + " |")
         print("  -------------------")
+        print("    a b c d e f g h")

@@ -6,6 +6,7 @@ from queen import Queen
 
 class Game():
 
+
     def __init__(self):
         self._board = [[None for j in range(8)] for i in range(8)]
         self.fill_in_figures()
@@ -13,7 +14,7 @@ class Game():
         self._highlighted = None
 
     def start(self):
-        print("zadávej pozice ve formátu např. '1 3'")
+        print("zadávej pozice ve formátu např. 'a 3'")
         while not self._game_over:
             self.draw()
             self.update()
@@ -25,8 +26,16 @@ class Game():
         self.require_player_to_move()
 
     def require_player_to_move(self):
+        columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
         while True:
-            coords = input("táhni: ").split(" ")
+            coords = input("táhni: ").split(" ") 
+
+            if coords[0] not in columns:
+                print("souřadnice jsou od a do h")
+                continue
+
+            coords[0] = columns[coords[0]]
+            coords = coords[::-1]
 
             try:
                 (x, y) = list(map(lambda c: int(c), coords))
@@ -46,8 +55,16 @@ class Game():
                 print("táhneš špatně táhni do prdele, důvod: " + str(e))
 
     def require_player_to_highlight_figure(self):
+        columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
         while True:
-            coords = input("označ figurku: ").split(" ")
+            coords = input("vyber si figurku: ").split(" ") 
+
+            if coords[0] not in columns:
+                print("souřadnice jsou od a do h")
+                continue
+
+            coords[0] = columns[coords[0]]
+            coords = coords[::-1]
 
             try:
                 (x, y) = list(map(lambda c: int(c), coords))
@@ -62,6 +79,7 @@ class Game():
             if self._board[x - 1][y - 1] == None:
                 print("na tomto políčku není žádná figurka")
                 continue
+
 
             self._highlighted = self._board[x - 1][y - 1]
             return
