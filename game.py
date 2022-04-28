@@ -3,12 +3,13 @@ from graphics import Graphics
 from rock import Rock
 from queen import Queen
 import csv
-
+from file_loader import FileLoader
 
 class Game():
 
 
     def __init__(self):
+        self._fl = FileLoader("csv_file.csv")
         self._board = [[None for j in range(8)] for i in range(8)]
         self.fill_in_figures()
         self._game_over = False
@@ -28,6 +29,7 @@ class Game():
         self.require_player_to_highlight_figure()
         self.draw()
         self.require_player_to_move()
+        self._fl.save_game(self._board)
 
     def require_player_to_move(self):
         columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
@@ -92,11 +94,5 @@ class Game():
         Graphics.draw(self._board, self._highlighted)
 
     def fill_in_figures(self):
-        columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
-        colors = {"w": 0, "b": 1}
-
-        with open("csv_file.csv", "r") as file:
-            reader = csv.reader(file)
-
-            for figure in reader:
-                self._board[figure[0][1]][columns[figure[0][0]]] = colors[figure[1]]
+        for position in self._fl.load_game():
+                self._board[position[0]][position[1]] = Rock(position[2])
