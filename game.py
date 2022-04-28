@@ -2,6 +2,7 @@
 from graphics import Graphics
 from rock import Rock
 from queen import Queen
+import csv
 
 
 class Game():
@@ -21,6 +22,9 @@ class Game():
 
     def update(self):
         print("update")
+
+        #csv_file přepíše nové pozice figur v souboru
+
         self.require_player_to_highlight_figure()
         self.draw()
         self.require_player_to_move()
@@ -88,12 +92,11 @@ class Game():
         Graphics.draw(self._board, self._highlighted)
 
     def fill_in_figures(self):
-        for i in range(3):
-            for j in range(8):
-                if (i + j) % 2 == 0:
-                    self._board[i][j] = Rock(0)
+        columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
+        colors = {"w": 0, "b": 1}
 
-        for i in [5, 6, 7]:
-            for j in range(8):
-                if (i + j) % 2 == 0:
-                    self._board[i][j] = Rock(1)
+        with open("csv_file.csv", "r") as file:
+            reader = csv.reader(file)
+
+            for figure in reader:
+                self._board[figure[0][1]][columns[figure[0][0]]] = colors[figure[1]]
