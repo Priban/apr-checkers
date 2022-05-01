@@ -30,6 +30,8 @@ class Graphics:
                         self.QUEEN_TYPE_A if grid[i][j]._color else self.QUEEN_TYPE_B,
                         "green" if grid[i][j] == highlighted else "white"
                     )
+                elif (i + j + 1) % 2 == 1:
+                    radek += "·"
                 else:
                     radek += " "
 
