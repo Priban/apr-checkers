@@ -29,7 +29,7 @@ class Game():
     def require_player_to_move(self):
         columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
         while True:
-            coords = input("táhni: ").split(" ") 
+            coords = list(input("táhni: "))
 
             if coords[0] not in columns:
                 print("souřadnice jsou od a do h")
@@ -38,6 +38,7 @@ class Game():
             coords[0] = columns[coords[0]]
             coords = coords[::-1]
 
+            # zkusí coords převést na int
             try:
                 (x, y) = list(map(lambda c: int(c), coords))
             except ValueError:
@@ -58,7 +59,7 @@ class Game():
     def require_player_to_highlight_figure(self):
         columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
         while True:
-            coords = input("vyber si figurku: ").split(" ") 
+            coords = list(input("vyber si figurku: "))
 
             if coords[0] not in columns:
                 print("souřadnice jsou od a do h")
@@ -89,12 +90,14 @@ class Game():
         Graphics.draw(self._board, self._highlighted)
 
     def init_board(self):
-        while True:
+        while False: # sem potom True
             load_from_csv = input("0 -> začít novou hru | 1 -> načíst rozehranou hru: ")
             if load_from_csv == "0" or load_from_csv == "1":
                 break
 
-        if load_from_csv == "1" and False: # pro debug se vždy načte default board, potom smazat and False
+        load_from_csv = False
+
+        if load_from_csv == "1": # pro debug se vždy načte default board
             try:
                 return self.load_board_from_csv()
             except FileNotFoundError:
