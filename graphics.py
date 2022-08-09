@@ -2,7 +2,6 @@ from termcolor import colored
 from rock import Rock
 from queen import Queen
 
-
 class Graphics:
 
     ROCK_TYPE_A = "x"

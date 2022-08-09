@@ -1,5 +1,3 @@
-
-from json import load
 from graphics import Graphics
 from rock import Rock
 from queen import Queen

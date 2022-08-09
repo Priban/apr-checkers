@@ -1,6 +1,5 @@
 import csv
 
-
 class FileLoader:
 
     def __init__(self, filename):
