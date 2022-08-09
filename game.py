@@ -1,4 +1,5 @@
 
+from json import load
 from graphics import Graphics
 from rock import Rock
 from queen import Queen
@@ -7,24 +8,19 @@ from file_loader import FileLoader
 
 class Game():
 
-
     def __init__(self):
         self._fl = FileLoader("csv_file.csv")
-        self._board = self.init_board()
         self._game_over = False
         self._highlighted = None
 
     def start(self):
+        self._board = self.init_board()
         print("zadávej pozice ve formátu např. 'a 3'")
         while not self._game_over:
             self.draw()
             self.update()
 
     def update(self):
-        print("update")
-
-        #csv_file přepíše nové pozice figur v souboru
-
         self.require_player_to_highlight_figure()
         self.draw()
         self.require_player_to_move()
@@ -93,17 +89,29 @@ class Game():
         Graphics.draw(self._board, self._highlighted)
 
     def init_board(self):
-        try:
-            return self.load_from_csv()
-        except FileNotFoundError:
-            board = [[None for j in range(8)] for i in range(8)]
-            for i in [0, 1, 2, 5, 6, 7]:
-                for j in range(4):
-                    board[i][j * 2 + i % 2] = Rock(0 if i < 3 else 1)
-            return board
+        while True:
+            load_from_csv = input("0 -> začít novou hru | 1 -> načíst rozehranou hru: ")
+            if load_from_csv == "0" or load_from_csv == "1":
+                break
 
-    def load_from_csv(self):
+        if load_from_csv == "1" and False: # pro debug se vždy načte default board, potom smazat and False
+            try:
+                return self.load_board_from_csv()
+            except FileNotFoundError:
+                print("Soubor nenalezen :(")
+                return self.load_default_board()
+        else:
+            return self.load_default_board()
+
+    def load_board_from_csv(self):
         board = [[None for j in range(8)] for i in range(8)]
         for position in self._fl.load_game():
                 board[position[0]][position[1]] = Rock(position[2])
+        return board
+
+    def load_default_board(self):
+        board = [[None for j in range(8)] for i in range(8)]
+        for i in [0, 1, 2, 5, 6, 7]:
+            for j in range(4):
+                board[i][j * 2 + i % 2] = Rock(0 if i < 3 else 1)
         return board
