@@ -10,8 +10,7 @@ class Game():
 
     def __init__(self):
         self._fl = FileLoader("csv_file.csv")
-        self._board = [[None for j in range(8)] for i in range(8)]
-        self.fill_in_figures()
+        self._board = self.init_board()
         self._game_over = False
         self._highlighted = None
 
@@ -93,6 +92,18 @@ class Game():
     def draw(self):
         Graphics.draw(self._board, self._highlighted)
 
-    def fill_in_figures(self):
+    def init_board(self):
+        try:
+            return self.load_from_csv()
+        except FileNotFoundError:
+            board = [[None for j in range(8)] for i in range(8)]
+            for i in [0, 1, 2, 5, 6, 7]:
+                for j in range(4):
+                    board[i][j * 2 + i % 2] = Rock(0 if i < 3 else 1)
+            return board
+
+    def load_from_csv(self):
+        board = [[None for j in range(8)] for i in range(8)]
         for position in self._fl.load_game():
-                self._board[position[0]][position[1]] = Rock(position[2])
+                board[position[0]][position[1]] = Rock(position[2])
+        return board
