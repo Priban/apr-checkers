@@ -4,7 +4,6 @@ class Figure(ABC):
 
     def __init__(self, color):
         self._color = color
-
     
     def move(self, x, y, board):
         if self.move_is_valid(x, y, board):

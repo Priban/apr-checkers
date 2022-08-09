@@ -10,6 +10,7 @@ class Game():
         self._fl = FileLoader("csv_file.csv")
         self._game_over = False
         self._highlighted = None
+        self._turn_of_player = 0
 
     def start(self):
         self._board = self.init_board()
@@ -48,6 +49,9 @@ class Game():
                 continue
 
             try:
+                # tady se vybere Node ze spojového stromu který má root pozici highlighted figury
+                # a bude obsahovat buďto validní tah nebo zprávu proč je tah špatný,
+                # pokud Node ve stromu neexistuje je tah mimo dosah
                 self._highlighted.move(x - 1, y - 1, self._board)
                 self._highlighted = None
                 return
