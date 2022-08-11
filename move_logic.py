@@ -17,11 +17,14 @@ class MoveLogic():
 
         # tady se v cyklu vyzkouší každá možná pozice a přidá se do stromu moves buď jako validní tah
         # nebo jako nevalidní tah se zprávou proč nelze provést
-        try:
-            if figure.move_is_valid((starting_position[0] + 1, starting_position[1] + 1), board):
-                move = Node((starting_position[0] + 1, starting_position[1] + 1), parent=moves, position=(starting_position[0] + 1, starting_position[1] + 1))
-        except:
-            pass
+        for dx in [-1, 1]:
+            for dy in [-1, 1]:
+                # pokud na cílovém poli stojí figura, zkusí se pole za ní (znovu +dx +dy)
+                try:
+                    if figure.move_is_valid((starting_position[0] + 1, starting_position[1] + 1), board):
+                        move = Node((starting_position[0] + 1, starting_position[1] + 1), parent=moves, position=(starting_position[0] + 1, starting_position[1] + 1))
+                except Exception as e:
+                        move = Node()
         print(moves.children)
 
     def find_possible_moves(self, board, player_on_turn):
