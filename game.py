@@ -1,4 +1,5 @@
 from graphics import Graphics
+from move_logic import MoveLogic
 from rock import Rock
 from queen import Queen
 import csv
@@ -8,9 +9,10 @@ class Game():
 
     def __init__(self):
         self._fl = FileLoader("csv_file.csv")
+        self._ml = MoveLogic()
         self._game_over = False
         self._highlighted = None
-        self._turn_of_player = 0
+        self._player_on_turn = 0
 
     def start(self):
         self._board = self.init_board()
@@ -20,6 +22,11 @@ class Game():
             self.update()
 
     def update(self):
+        if self._player_on_turn == 0:
+            print("Na řadě je hráč s kolečky")
+        else:
+            print("Na řadě je hráč s křížky")
+        self._ml.find_possible_moves(self._board, player_on_turn=self._player_on_turn)
         self.require_player_to_highlight_figure()
         self.draw()
         self.require_player_to_move()
@@ -49,7 +56,7 @@ class Game():
                 continue
 
             try:
-                # tady se vybere Node ze spojového stromu který má root pozici highlighted figury
+                # tady se vybere Node ze spojového stromu který je potomkem pozice highlighted figury
                 # a bude obsahovat buďto validní tah nebo zprávu proč je tah špatný,
                 # pokud Node ve stromu neexistuje je tah mimo dosah
                 self._highlighted.move(x - 1, y - 1, self._board)

@@ -5,7 +5,8 @@ class Rock(Figure):
     def __init__(self, color):
         super().__init__(color)
 
-    def move_is_valid(self, x, y, board):
+    def move_is_valid(self, position, board):
+        (x, y) = position
         (current_x, current_y) = self.get_position(board)
         # když (i + j) % 2 == 0
         if not (x + y) % 2 == 0: raise Exception("Táhni jenom na bílý políčka")

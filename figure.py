@@ -6,7 +6,7 @@ class Figure(ABC):
         self._color = color
     
     def move(self, x, y, board):
-        if self.move_is_valid(x, y, board):
+        if self.move_is_valid((x, y), board):
             (previous_x, previous_y) = self.get_position(board)
             board[previous_x][previous_y] = None
             board[x][y] = self
@@ -20,5 +20,8 @@ class Figure(ABC):
         for i in range(8):
             for j in range(8):
                 if board[i][j] == self: return (i, j)
+
+    def get_color(self):
+        return self._color
 
         
