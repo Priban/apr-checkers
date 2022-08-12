@@ -1,5 +1,4 @@
-from turtle import position
-from anytree import Node
+from anytree import Node, RenderTree, ContStyle
 from rock import Rock
 
 # tahy budou v poli které se vygeneruje při začátku kola hráče,
@@ -10,28 +9,40 @@ from rock import Rock
 # který je pak jediným platným tahem)
 
 class MoveLogic():
-
-    def find_moves(self, board, figure):
-        moves = Node(figure.get_position(board), position=figure.get_position(board))
-        starting_position = figure.get_position(board)
+    
+    # rekurzivně vygeneruje strom možných tahů
+    def find_moves(self, board, figure, position=None, parent=None):
+        position = figure.get_position(board) if not position else position
+        moves = Node(position, position=position, valid=1, parent=parent)
 
         # tady se v cyklu vyzkouší každá možná pozice a přidá se do stromu moves buď jako validní tah
         # nebo jako nevalidní tah se zprávou proč nelze provést
+        # pokud už není žádný potomek obsahující validní tah, uzavře se rekurze
+
+        # pokud je depth > 0 
         for dx in [-1, 1]:
+            dxpos = position[0] + dx
+            if not (0 <= dxpos < 8): continue
             for dy in [-1, 1]:
+                dypos = position[1] + dy
+                if not (0 <= dypos < 8): continue
+                dpos = (dxpos, dypos) 
+
                 # pokud na cílovém poli stojí figura, zkusí se pole za ní (znovu +dx +dy)
                 try:
-                    if figure.move_is_valid((starting_position[0] + 1, starting_position[1] + 1), board):
-                        move = Node((starting_position[0] + 1, starting_position[1] + 1), parent=moves, position=(starting_position[0] + 1, starting_position[1] + 1))
+                    if figure.move_is_valid(dpos, board, current_position=position):
+                        move = self.find_moves(board, figure, dpos, moves)
                 except Exception as e:
-                        move = Node()
-        print(moves.children)
+                    move = Node(dpos, parent=moves, position=dpos, valid=0, message=str(e))
+
+        return moves
 
     def find_possible_moves(self, board, player_on_turn):
         figures_on_turn = self.find_figures_on_turn(board, player_on_turn)
         # for figure in figures_on_turn:
         #     print(figure.get_position(board))
-        self.find_moves(board, figures_on_turn[8])
+        tree = self.find_moves(board, figures_on_turn[8])
+        print(RenderTree(tree, style=ContStyle()))
 
     def find_figures_on_turn(self, board, player_on_turn):
         figures = []
