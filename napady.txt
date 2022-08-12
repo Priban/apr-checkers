@@ -1,3 +1,5 @@
 když je hráč na řadě jeho figurky se vykreslí jako a, b, c, d místo x nebo o aby mohl jednodušše vybrat s jakou bude hrát
 
 označení dámy: x̄, Ø
+
+nastavení hry pro debug tak, že vypíše strom tahů aktuálně highlighted figury
