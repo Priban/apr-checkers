@@ -13,7 +13,7 @@ class Figure(ABC):
             print("ahoj")
 
     @abstractmethod
-    def move_is_valid(self, x, y, board):
+    def move_is_valid(self, position, current_position, board):
         return
 
     def get_position(self, board):
