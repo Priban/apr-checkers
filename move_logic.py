@@ -15,6 +15,8 @@ class MoveLogic():
         position = figure.get_position(board) if not position else position
         moves = Node(position, position=position, valid=1, parent=parent)
 
+        if isinstance(figure, Rock) and moves.depth == 1: return moves
+
         # tady se v cyklu vyzkouší každá možná pozice a přidá se do stromu moves buď jako validní tah
         # nebo jako nevalidní tah se zprávou proč nelze provést
         # pokud už není žádný potomek obsahující validní tah, uzavře se rekurze
