@@ -15,11 +15,7 @@ class MoveLogic():
         position = figure.get_position(board) if not position else position
         moves = Node(position, position=position, parent=parent, jump=jump)
 
-        # tohle nebude fungovat při skákání sekery - OPRAVIT
-        #if isinstance(figure, Rock) and moves.depth == 1: return moves
-
-        # tady se v cyklu vyzkouší každá možná pozice a přidá se do stromu moves buď jako validní tah
-        # nebo jako nevalidní tah se zprávou proč nelze provést
+        # tady se v cyklu vyzkouší každá možná pozice a pokud na ni lze táhnout, přidá se do stromu moves jako validní tah
         # pokud už není žádný potomek obsahující validní tah, uzavře se rekurze
 
         # udělat že se vyzkouší všechna prázdná pole
@@ -29,11 +25,9 @@ class MoveLogic():
                 pos = (i, j) 
                 
                 validation = figure.move_is_valid(pos, board, current_position=position)
-                if validation == 1: # normální tah
-                    print("nnormál")
+                if validation == 1: # pokud posuzovaný tah je normálním tahem
                     move = Node(pos, parent=moves, position=pos, jump=False)
-                elif validation == 2: # skok
-                    print("skok")
+                elif validation == 2: # pokud posuzovaný tah je skokem, pokračuje rekurze dál
                     move = self.find_moves_of_figure(board, figure, pos, moves, True)
                 else: # nevalidní tah
                     ...
@@ -44,6 +38,9 @@ class MoveLogic():
     def find_all_possible_moves(self, board, player_on_turn):
         figures_on_turn = self.find_figures_on_turn(board, player_on_turn)
         all_moves = [self.find_moves_of_figure(board, figure) for figure in figures_on_turn]
+
+        # vyfiltrování tahů s délkou 0
+        all_moves = [move for move in all_moves if move.height > 0]
 
         # pokud existují tahy kde se skáče, ostatní se odstraní
         # TODO přednost skákání dámy
