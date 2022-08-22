@@ -23,6 +23,8 @@ class Game():
             self.draw()
             self.update()
 
+    # Alex TODO: 
+    # změna hráče který je na tahu po konci kola
     def update(self):
         if self._player_on_turn == 0:
             print("Na řadě je hráč s kolečky")
