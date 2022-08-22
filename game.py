@@ -4,6 +4,7 @@ from rock import Rock
 from queen import Queen
 import csv
 from file_loader import FileLoader
+from anytree import Node, RenderTree, ContStyle, findall
 
 class Game():
 
@@ -27,13 +28,24 @@ class Game():
             print("Na řadě je hráč s kolečky")
         else:
             print("Na řadě je hráč s křížky")
+
         self._current_possible_moves = self._ml.find_all_possible_moves(self._board, player_on_turn=self._player_on_turn)
-        print(self._current_possible_moves)
+
+        # pro debug
+        print("----------------- Aktuální možné tahy -----------------")
+        for move in self._current_possible_moves:
+            print(RenderTree(move, style=ContStyle()))
+        print("-------------------------------------------------------")
+
         self.require_player_to_highlight_figure()
         self.draw()
         self.require_player_to_move()
         self._fl.save_game(self._board)
 
+    # Alex TODO: 
+    # - zjištění jestli hráč táhnul na pozici která je ve stromu označené figurky
+    # - pokud došlo ke skoku (node.jump == True), hráč táhne znovu,
+    #   vyhození přeskočených figurek bude ve funkci move v třídě Figure
     def require_player_to_move(self):
         columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
         while True:
@@ -67,6 +79,8 @@ class Game():
             except Exception as e:
                 print("táhneš špatně táhni do prdele, důvod: " + str(e))
 
+    # Alex TODO: 
+    # zjištění jestli hráč označil figurku která má svůj strom (lze s ní táhnout)
     def require_player_to_highlight_figure(self):
         columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
         while True:
@@ -97,18 +111,20 @@ class Game():
             self._highlighted = self._board[x - 1][y - 1]
             return
 
+    # Alex TODO: 
+    # - obarvení figurek s kterými lze táhnout (zjistíš podle rootů stromů, pozice rootu je pozice figurky)
+    # - po vybrání figurky obarvení pozic kam s ní lze táhnout 
+    #   (po vybrání figurky bude třeba znovu provést self.draw())
     def draw(self):
         Graphics.draw(self._board, self._highlighted)
 
     def init_board(self):
-        while False: # sem potom True
+        while True:
             load_from_csv = input("0 -> začít novou hru | 1 -> načíst rozehranou hru: ")
             if load_from_csv == "0" or load_from_csv == "1":
                 break
 
-        load_from_csv = "1"
-
-        if load_from_csv == "1": # pro debug se vždy načte default board
+        if load_from_csv == "1":
             try:
                 return self.load_board_from_csv()
             except FileNotFoundError:

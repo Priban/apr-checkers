@@ -5,8 +5,8 @@ class Figure(ABC):
     def __init__(self, color):
         self._color = color
     
+    # kdokoliv TODO: odstranění přeskočených figur
     def move(self, x, y, board):
-        # TODO odstranění přeskočených figur
         if self.move_is_valid((x, y), board):
             (previous_x, previous_y) = self.get_position(board)
             board[previous_x][previous_y] = None
