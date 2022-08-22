@@ -26,7 +26,7 @@ class Game():
             print("Na řadě je hráč s kolečky")
         else:
             print("Na řadě je hráč s křížky")
-        self._ml.find_possible_moves(self._board, player_on_turn=self._player_on_turn)
+        self._ml.find_all_possible_moves(self._board, player_on_turn=self._player_on_turn)
         self.require_player_to_highlight_figure()
         self.draw()
         self.require_player_to_move()
@@ -104,7 +104,7 @@ class Game():
             if load_from_csv == "0" or load_from_csv == "1":
                 break
 
-        load_from_csv = False
+        load_from_csv = "1"
 
         if load_from_csv == "1": # pro debug se vždy načte default board
             try:

@@ -11,41 +11,42 @@ from rock import Rock
 class MoveLogic():
     
     # rekurzivně vygeneruje strom možných tahů
-    def find_moves(self, board, figure, position=None, parent=None):
+    def find_moves_of_figure(self, board, figure, position=None, parent=None, jump=False):
         position = figure.get_position(board) if not position else position
-        moves = Node(position, position=position, valid=1, parent=parent)
+        moves = Node(position, position=position, parent=parent, jump=jump)
 
-        if isinstance(figure, Rock) and moves.depth == 1: return moves
+        # tohle nebude fungovat při skákání sekery - OPRAVIT
+        #if isinstance(figure, Rock) and moves.depth == 1: return moves
 
         # tady se v cyklu vyzkouší každá možná pozice a přidá se do stromu moves buď jako validní tah
         # nebo jako nevalidní tah se zprávou proč nelze provést
         # pokud už není žádný potomek obsahující validní tah, uzavře se rekurze
 
-        # pokud je depth > 0 
-        for dx in [-1, 1]:
-            dxpos = position[0] + dx
-            if not (0 <= dxpos < 8): continue
-            for dy in [-1, 1]:
-                dypos = position[1] + dy
-                if not (0 <= dypos < 8): continue
-                dpos = (dxpos, dypos) 
-
-                # pokud na cílovém poli stojí figura, zkusí se pole za ní (znovu +dx +dy)
-                try:
-                    if figure.move_is_valid(dpos, board, current_position=position):
-                        move = self.find_moves(board, figure, dpos, moves)
-                except Exception as e:
-                    move = Node(dpos, parent=moves, position=dpos, valid=0, message=str(e))
+        # udělat že se vyzkouší všechna prázdná pole
+        for i in range(0, 8):
+            for j in range(0, 8):
+                if board[i][j] != None: continue
+                pos = (i, j) 
+                
+                validation = figure.move_is_valid(pos, board, current_position=position)
+                if validation == 1: # normální tah
+                    print("nnormál")
+                    move = Node(pos, parent=moves, position=pos, jump=False)
+                elif validation == 2: # skok
+                    print("skok")
+                    move = self.find_moves_of_figure(board, figure, pos, moves, True)
+                else: # nevalidní tah
+                    ...
+                    # move = Node(pos, parent=moves, position=pos, valid=0, message=validation)
 
         return moves
 
-    def find_possible_moves(self, board, player_on_turn):
+    def find_all_possible_moves(self, board, player_on_turn):
         figures_on_turn = self.find_figures_on_turn(board, player_on_turn)
-        # for figure in figures_on_turn:
-        #     print(figure.get_position(board))
-        tree = self.find_moves(board, figures_on_turn[8])
-        print(RenderTree(tree, style=ContStyle()))
-
+        all_moves = [self.find_moves_of_figure(board, figure) for figure in figures_on_turn]
+        for move in all_moves:
+            print(RenderTree(move, style=ContStyle()))
+        
     def find_figures_on_turn(self, board, player_on_turn):
         figures = []
         for i in range(8):
