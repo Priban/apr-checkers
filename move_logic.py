@@ -1,4 +1,4 @@
-from anytree import Node, RenderTree, ContStyle
+from anytree import Node, RenderTree, ContStyle, findall
 from rock import Rock
 
 # tahy budou v poli které se vygeneruje při začátku kola hráče,
@@ -9,6 +9,7 @@ from rock import Rock
 # který je pak jediným platným tahem)
 
 class MoveLogic():
+    current_possible_moves = []
     
     # rekurzivně vygeneruje strom možných tahů
     def find_moves_of_figure(self, board, figure, position=None, parent=None, jump=False):
@@ -44,8 +45,15 @@ class MoveLogic():
     def find_all_possible_moves(self, board, player_on_turn):
         figures_on_turn = self.find_figures_on_turn(board, player_on_turn)
         all_moves = [self.find_moves_of_figure(board, figure) for figure in figures_on_turn]
-        for move in all_moves:
-            print(RenderTree(move, style=ContStyle()))
+
+        # pokud existují tahy kde se skáče, ostatní se odstraní
+        # TODO přednost skákání dámy
+        jump_moves = [move for move in all_moves if findall(move, lambda node: node.jump == True)]
+
+        if len(jump_moves) > 0: 
+            all_moves = jump_moves
+
+        self.current_possible_moves = all_moves
         
     def find_figures_on_turn(self, board, player_on_turn):
         figures = []
