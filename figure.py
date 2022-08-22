@@ -6,6 +6,7 @@ class Figure(ABC):
         self._color = color
     
     def move(self, x, y, board):
+        # TODO odstranění přeskočených figur
         if self.move_is_valid((x, y), board):
             (previous_x, previous_y) = self.get_position(board)
             board[previous_x][previous_y] = None

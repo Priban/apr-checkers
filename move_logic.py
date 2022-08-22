@@ -9,7 +9,6 @@ from rock import Rock
 # který je pak jediným platným tahem)
 
 class MoveLogic():
-    current_possible_moves = []
     
     # rekurzivně vygeneruje strom možných tahů
     def find_moves_of_figure(self, board, figure, position=None, parent=None, jump=False):
@@ -53,7 +52,7 @@ class MoveLogic():
         if len(jump_moves) > 0: 
             all_moves = jump_moves
 
-        self.current_possible_moves = all_moves
+        return all_moves
         
     def find_figures_on_turn(self, board, player_on_turn):
         figures = []

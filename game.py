@@ -13,6 +13,7 @@ class Game():
         self._game_over = False
         self._highlighted = None
         self._player_on_turn = 0
+        self.current_possible_moves = []
 
     def start(self):
         self._board = self.init_board()
@@ -26,7 +27,7 @@ class Game():
             print("Na řadě je hráč s kolečky")
         else:
             print("Na řadě je hráč s křížky")
-        self._ml.find_all_possible_moves(self._board, player_on_turn=self._player_on_turn)
+        self.current_possible_moves = self._ml.find_all_possible_moves(self._board, player_on_turn=self._player_on_turn)
         self.require_player_to_highlight_figure()
         self.draw()
         self.require_player_to_move()
