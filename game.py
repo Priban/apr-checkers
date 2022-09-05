@@ -79,7 +79,7 @@ class Game():
                 self._highlighted = None
                 return
             except Exception as e:
-                print("táhneš špatně táhni do prdele, důvod: " + str(e))
+                print("táhneš špatně, důvod: " + str(e))
 
     # Alex TODO: 
     # zjištění jestli hráč označil figurku která má svůj strom (lze s ní táhnout)
