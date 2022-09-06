@@ -21,7 +21,7 @@ class MoveLogic():
         # tady se v cyklu vyzkouší každá možná pozice a pokud na ni lze táhnout, přidá se do stromu moves jako validní tah
         # pokud už není žádný potomek obsahující validní tah, uzavře se rekurze
 
-        # udělat že se vyzkouší všechna prázdná pole
+        # vyzkouší se všechna prázdná pole (jednodušší přístup pro implementaci, horší pro efektivitu)
         for i in range(0, 8):
             for j in range(0, 8):
                 if board[i][j] != None: continue
@@ -29,7 +29,13 @@ class MoveLogic():
                 
                 validation = figure.move_is_valid(pos, board, current_position=position)
                 if validation == 1: # pokud posuzovaný tah je normálním tahem
-                    move = Node(pos, parent=moves, position=pos, jump=False)
+                    # zjistíme jestli předchozí tah nebyl skokem, pokud byl tak tento tah již provést nemůžeme 
+                    # (nelze skočit a pak znovu táhnout)
+                    if moves.parent:
+                        if not moves.jump:
+                            move = Node(pos, parent=moves, position=pos, jump=False)
+                    else:
+                        move = Node(pos, parent=moves, position=pos, jump=False)
                 elif validation == 2: # pokud posuzovaný tah je skokem, pokračuje rekurze dál
                     move = self.find_moves_of_figure(board, figure, pos, moves, True)
                 else: # nevalidní tah
