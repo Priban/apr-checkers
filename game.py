@@ -45,7 +45,7 @@ class Game():
             self._player_on_turn = 1
         else:
             self._player_on_turn = 0
-            
+
         self._fl.save_game(self._board)
 
     # Alex TODO: 
@@ -53,6 +53,13 @@ class Game():
     #   vyhození přeskočených figurek bude ve funkci move v třídě Figure
     def require_player_to_move(self):
         columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
+
+        # Tady zjistíme, jaký strom používáme
+        current_move = None
+        for move in self._current_possible_moves:
+            if move.position == self._highlighted.get_position(self._board):
+                current_move = move
+                
         while True:
             coords = list(input("táhni: "))
 
@@ -74,13 +81,19 @@ class Game():
                 print("souřadnice jsou od 1 do 8")
                 continue
             
-            #pokud nalezne move s pozicí highlighted figury, 
-            for move in self._current_possible_moves:
-                if move.position == self._highlighted.get_position(self._board):
-                    if find(move, lambda node: node.position == (x-1, y-1), maxlevel=2):
-                        self._highlighted.move(x - 1, y - 1, self._board)
-                        self._highlighted = None
-                        return
+            #pokud nalezne move s pozicí highlighted figury,
+            position_to_move = find(current_move, lambda node: node.position == (x-1, y-1), maxlevel=2)
+            if position_to_move:
+                self._highlighted.move(x - 1, y - 1, self._board)
+                
+                if not position_to_move.is_leaf:
+                    current_move = position_to_move
+                    self.draw()
+                    continue      
+                else:
+                    self._highlighted = None
+                    return
+
 
             print("Sem táhnout nemůžeš, táhni znova.")
 
