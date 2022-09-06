@@ -40,6 +40,12 @@ class Game():
         self.require_player_to_highlight_figure()
         self.draw()
         self.require_player_to_move()
+
+        if self._player_on_turn == 0:
+            self._player_on_turn = 1
+        else:
+            self._player_on_turn = 0
+            
         self._fl.save_game(self._board)
 
     # Alex TODO: 
