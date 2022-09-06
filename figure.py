@@ -7,11 +7,10 @@ class Figure(ABC):
     
     # kdokoliv TODO: odstranění přeskočených figur
     def move(self, x, y, board):
-        if self.move_is_valid((x, y), board):
-            (previous_x, previous_y) = self.get_position(board)
-            board[previous_x][previous_y] = None
-            board[x][y] = self
-            print("ahoj")
+        (previous_x, previous_y) = self.get_position(board)
+        board[previous_x][previous_y] = None
+        board[x][y] = self
+        print("ahoj")
 
     @abstractmethod
     def move_is_valid(self, position, current_position, board):

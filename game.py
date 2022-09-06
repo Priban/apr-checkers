@@ -43,7 +43,6 @@ class Game():
         self._fl.save_game(self._board)
 
     # Alex TODO: 
-    # - zjištění jestli hráč táhnul na pozici která je ve stromu označené figurky
     # - pokud došlo ke skoku (node.jump == True), hráč táhne znovu,
     #   vyhození přeskočených figurek bude ve funkci move v třídě Figure
     def require_player_to_move(self):
@@ -68,20 +67,21 @@ class Game():
             if x > 8 or y > 8 or x < 1 or y < 1:
                 print("souřadnice jsou od 1 do 8")
                 continue
+            
+            #pokud nalezne move s pozicí highlighted figury, 
+            for move in self._current_possible_moves:
+                if move.position == self._highlighted.get_position(self._board):
+                    if find(move, lambda node: node.position == (x-1, y-1), maxlevel=2):
+                        self._highlighted.move(x - 1, y - 1, self._board)
+                        self._highlighted = None
+                        return
 
-            try:
-                # tady se vybere Node ze spojového stromu který je potomkem pozice highlighted figury
-                # a bude obsahovat buďto validní tah nebo zprávu proč je tah špatný,
-                # pokud Node ve stromu neexistuje je tah mimo dosah
-                self._highlighted.move(x - 1, y - 1, self._board)
-                self._highlighted = None
-                return
-            except Exception as e:
-                print("táhneš špatně táhni do prdele, důvod: " + str(e))
+            print("Sem táhnout nemůžeš, táhni znova.")
 
+            # tady se vybere Node ze spojového stromu který je potomkem pozice highlighted figury
+            # a bude obsahovat buďto validní tah nebo zprávu proč je tah špatný,
+            # pokud Node ve stromu neexistuje je tah mimo dosah
 
-    # Alex TODO: 
-    # zjištění jestli hráč označil figurku která má svůj strom (lze s ní táhnout)
     def require_player_to_highlight_figure(self):
         columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
         while True:
