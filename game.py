@@ -4,7 +4,7 @@ from rock import Rock
 from queen import Queen
 import csv
 from file_loader import FileLoader
-from anytree import Node, RenderTree, ContStyle, findall
+from anytree import Node, RenderTree, ContStyle, findall, find
 
 class Game():
 
@@ -79,6 +79,7 @@ class Game():
             except Exception as e:
                 print("táhneš špatně táhni do prdele, důvod: " + str(e))
 
+
     # Alex TODO: 
     # zjištění jestli hráč označil figurku která má svůj strom (lze s ní táhnout)
     def require_player_to_highlight_figure(self):
@@ -107,9 +108,12 @@ class Game():
                 print("na tomto políčku není žádná figurka")
                 continue
 
+            for move in self._current_possible_moves:
+                if move.position == (x-1, y-1):
+                    self._highlighted = self._board[x - 1][y - 1]
+                    return
 
-            self._highlighted = self._board[x - 1][y - 1]
-            return
+            print("S touhle figurkou se nedá táhnout.")
 
     # Alex TODO: 
     # - obarvení figurek s kterými lze táhnout (zjistíš podle rootů stromů, pozice rootu je pozice figurky)
