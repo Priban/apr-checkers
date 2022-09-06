@@ -10,7 +10,7 @@ class Graphics:
     QUEEN_TYPE_B = "O"
 
     @classmethod
-    def draw(self, grid, highlighted):
+    def draw(self, grid, highlighted, possible_moves):
         print("    a b c d e f g h")
         print("  -------------------")
 
@@ -22,13 +22,14 @@ class Graphics:
                 if isinstance(grid[i][j], Rock):
                     radek += colored(
                         self.ROCK_TYPE_A if grid[i][j]._color else self.ROCK_TYPE_B,
-                        "green" if grid[i][j] == highlighted else "white"
+                        "green" if grid[i][j] == highlighted else "yellow" if (i, j) in possible_moves and not highlighted else "white"
                     )
                 elif isinstance(grid[i][j], Queen):
                     radek += colored(
                         self.QUEEN_TYPE_A if grid[i][j]._color else self.QUEEN_TYPE_B,
-                        "green" if grid[i][j] == highlighted else "white"
+                        "green" if grid[i][j] == highlighted else "yellow" if (i, j) in possible_moves and not highlighted else "white"
                     )
+                
                 elif (i + j + 1) % 2 == 1:
                     radek += "·"
                 else:
@@ -37,3 +38,4 @@ class Graphics:
             print(radek + " |")
         print("  -------------------")
         print("    a b c d e f g h")
+        print(possible_moves)

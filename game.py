@@ -19,6 +19,7 @@ class Game():
     def start(self):
         self._board = self.init_board()
         print("zadávej pozice ve formátu např. 'a 3'")
+        self._current_possible_moves = self._ml.find_all_possible_moves(self._board, player_on_turn=self._player_on_turn)
         while not self._game_over:
             self.draw()
             self.update()
@@ -28,8 +29,6 @@ class Game():
             print("Na řadě je hráč s kolečky")
         else:
             print("Na řadě je hráč s křížky")
-
-        self._current_possible_moves = self._ml.find_all_possible_moves(self._board, player_on_turn=self._player_on_turn)
 
         # pro debug
         print("----------------- Aktuální možné tahy -----------------")
@@ -46,10 +45,10 @@ class Game():
         else:
             self._player_on_turn = 0
 
+        self._current_possible_moves = self._ml.find_all_possible_moves(self._board, player_on_turn=self._player_on_turn)
         self._fl.save_game(self._board)
 
-    # Alex TODO: 
-    #   vyhození přeskočených figurek bude ve funkci move v třídě Figure
+
     def require_player_to_move(self):
         columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
 
@@ -134,13 +133,10 @@ class Game():
 
             print("S touhle figurkou se nedá táhnout.")
 
-    # Alex TODO: 
-    # - obarvení figurek s kterými lze táhnout (zjistíš podle rootů stromů, pozice rootu je pozice figurky)
-    # - po vybrání figurky obarvení pozic kam s ní lze táhnout 
-    #   (po vybrání figurky bude třeba znovu provést self.draw())
-    def draw(self):
-        Graphics.draw(self._board, self._highlighted)
 
+    def draw(self):
+        Graphics.draw(self._board, self._highlighted, list(map(lambda node: node.position, self._current_possible_moves)))
+    
     def init_board(self):
         while True:
             load_from_csv = input("0 -> začít novou hru | 1 -> načíst rozehranou hru: ")
