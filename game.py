@@ -24,21 +24,20 @@ class Game():
             self.draw()
             self.update()
 
-    # Alex TODO: 
-    # změna hráče který je na tahu po konci kola
     def update(self):
         if self._player_on_turn == 0:
             print("Na řadě je hráč s kolečky")
         else:
             print("Na řadě je hráč s křížky")
 
+        self.require_player_to_highlight_figure()
+                
         # pro debug
         print("----------------- Aktuální možné tahy -----------------")
         for move in self._current_possible_moves:
             print(RenderTree(move, style=ContStyle()))
         print("-------------------------------------------------------")
 
-        self.require_player_to_highlight_figure()
         self.draw()
         self.require_player_to_move()
 
