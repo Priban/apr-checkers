@@ -8,6 +8,9 @@ from rock import Rock
 # a pak se u každého child udělá ten stejný proces (vzniklý strom může mít Node s největší hloubkou,
 # který je pak jediným platným tahem)
 
+# TODO když se s figurou dá skočit tak se nesmažou neskákací tahy stejné figury
+# když je tah skok a za ním je volné místo tak se přidá další tah - nemělo by být
+
 class MoveLogic():
     
     # rekurzivně vygeneruje strom možných tahů
