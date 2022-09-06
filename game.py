@@ -49,7 +49,6 @@ class Game():
         self._fl.save_game(self._board)
 
     # Alex TODO: 
-    # - pokud došlo ke skoku (node.jump == True), hráč táhne znovu,
     #   vyhození přeskočených figurek bude ve funkci move v třídě Figure
     def require_player_to_move(self):
         columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
@@ -81,13 +80,14 @@ class Game():
                 print("souřadnice jsou od 1 do 8")
                 continue
             
-            #pokud nalezne move s pozicí highlighted figury,
+            # pokud nalezne move s pozicí highlighted figury
             position_to_move = find(current_move, lambda node: node.position == (x-1, y-1), maxlevel=2)
             if position_to_move:
                 self._highlighted.move(x - 1, y - 1, self._board)
                 
+                # pokud po tahu následuje další tah
                 if not position_to_move.is_leaf:
-                    current_move = position_to_move
+                    current_move = position_to_move # useknutí předchozího tahu ze stromu
                     self.draw()
                     continue      
                 else:
