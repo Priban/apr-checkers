@@ -1,4 +1,5 @@
 from anytree import Node, RenderTree, ContStyle, findall
+from queen import Queen
 from rock import Rock
 
 # tahy budou v poli které se vygeneruje při začátku kola hráče,
@@ -22,10 +23,16 @@ class MoveLogic():
         # pokud už není žádný potomek obsahující validní tah, uzavře se rekurze
 
         # vyzkouší se všechna prázdná pole (jednodušší přístup pro implementaci, horší pro efektivitu)
-        for i in range(0, 8):
-            for j in range(0, 8):
-                if board[i][j] != None: continue
+        for i in [0, 1, 2, 5, 6, 7]:
+            for k in range(4):
+                j = k * 2 + i % 2
                 pos = (i, j) 
+
+                if board[i][j] != None or pos == position or (parent and pos == parent.position): continue
+
+                if isinstance(figure, Queen):
+                    print("--------------")
+                    print(i, j)
                 
                 validation = figure.move_is_valid(pos, board, current_position=position)
                 if validation == 1: # pokud posuzovaný tah je normálním tahem
@@ -37,6 +44,9 @@ class MoveLogic():
                     else:
                         move = Node(pos, parent=moves, position=pos, jump=False)
                 elif validation == 2: # pokud posuzovaný tah je skokem, pokračuje rekurze dál
+                    if isinstance(figure, Queen):
+                        print("skok")
+                        print("--------------")
                     move = self.find_moves_of_figure(board, figure, pos, moves, True)
                 else: # nevalidní tah
                     ...

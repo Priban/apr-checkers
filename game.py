@@ -155,7 +155,16 @@ class Game():
     def load_board_from_csv(self):
         board = [[None for j in range(8)] for i in range(8)]
         for position in self._fl.load_game():
-                board[position[0]][position[1]] = Rock(position[2])
+            figure = None
+            if position[2] == 0:
+                figure = Rock(0)
+            elif position[2] == 1:
+                figure = Queen(0)
+            elif position[2] == 2:
+                figure = Rock(1)
+            else:
+                figure = Queen(1)
+            board[position[0]][position[1]] = figure
         return board
 
     def load_default_board(self):

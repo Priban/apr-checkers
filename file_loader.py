@@ -1,11 +1,14 @@
 import csv
+from queen import Queen
+
+from rock import Rock
 
 class FileLoader:
 
     def __init__(self, filename):
         self.filename = filename
         self.columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
-        self.colors = {"w": 0, "b": 1}
+        self.colors = {"w": 0, "ww": 1, "b": 2, "bb": 3}
 
     def index_of(self, dict, value):
         return list(dict.keys())[list(dict.values()).index(value)]
@@ -28,4 +31,7 @@ class FileLoader:
             for i in range(len(board)):
                 for j in range(len(board)):
                     if board[i][j] != None:
-                        writer.writerow({"position": self.index_of(self.columns, j+1) + str(i+1), "rank_color": self.index_of(self.colors, board[i][j]._color)})
+                        type = "w" if board[i][j]._color == 0 else "b"
+                        if isinstance(board[i][j], Queen):
+                            type += type
+                        writer.writerow({"position": self.index_of(self.columns, j+1) + str(i+1), "rank_color": type})

@@ -31,5 +31,6 @@ class Figure(ABC):
         while position_x != x:
             if board[position_x][position_y]:
                 board[position_x][position_y] = None
+                return
             position_x += dir_x
             position_y += dir_y
