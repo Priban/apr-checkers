@@ -65,6 +65,21 @@ class MoveLogic():
         # TODO přednost skákání dámy
         jump_moves = [move for move in all_moves if findall(move, lambda node: node.jump == True)]
 
+        queen_jump_moves = [
+            move for move in jump_moves 
+            if move.position in 
+            map(lambda figure: figure.get_position(board) if isinstance(figure, Queen) else None, figures_on_turn)
+        ]
+
+        if len(queen_jump_moves) > 0:
+            jump_moves = queen_jump_moves
+
+        # ostatní neskokové tahy ve stromu se odstraní
+        for move in jump_moves:
+            for descendant in move.descendants:
+                if not descendant.jump:
+                    descendant.parent = None 
+
         if len(jump_moves) > 0: 
             all_moves = jump_moves
 
