@@ -6,8 +6,8 @@ class Graphics:
 
     ROCK_TYPE_A = "x"
     ROCK_TYPE_B = "o"
-    QUEEN_TYPE_A = "X"
-    QUEEN_TYPE_B = "O"
+    QUEEN_TYPE_A = "x̄"
+    QUEEN_TYPE_B = "Ø"
 
     @classmethod
     def draw(self, grid, highlighted, possible_moves):

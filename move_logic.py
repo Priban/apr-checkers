@@ -29,10 +29,6 @@ class MoveLogic():
                 pos = (i, j) 
 
                 if board[i][j] != None or pos == position or (parent and pos == parent.position): continue
-
-                if isinstance(figure, Queen):
-                    print("--------------")
-                    print(i, j)
                 
                 validation = figure.move_is_valid(pos, board, current_position=position)
                 if validation == 1: # pokud posuzovaný tah je normálním tahem
@@ -62,7 +58,6 @@ class MoveLogic():
         all_moves = [move for move in all_moves if move.height > 0]
 
         # pokud existují tahy kde se skáče, ostatní se odstraní
-        # TODO přednost skákání dámy
         jump_moves = [move for move in all_moves if findall(move, lambda node: node.jump == True)]
 
         queen_jump_moves = [
