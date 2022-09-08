@@ -18,11 +18,13 @@ class Game():
 
     def start(self):
         self._board = self.init_board()
-        print("zadávej pozice ve formátu např. 'a 3'")
         self._current_possible_moves = self._ml.find_all_possible_moves(self._board, player_on_turn=self._player_on_turn)
+        print("zadávej pozice ve formátu např. 'a3'")
         while not self._game_over:
             self.draw()
             self.update()
+
+        print("Vyhrál hráč s " + ("křížky" if self._player_on_turn == 0 else "kolečky"))
 
     def update(self):
         if self._player_on_turn == 0:
@@ -47,6 +49,11 @@ class Game():
             self._player_on_turn = 0
 
         self._current_possible_moves = self._ml.find_all_possible_moves(self._board, player_on_turn=self._player_on_turn)
+
+        if len(self._current_possible_moves) == 0:
+            self._game_over = True
+            return
+
         self._fl.save_game(self._board)
 
 
