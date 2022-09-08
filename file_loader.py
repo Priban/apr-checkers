@@ -1,26 +1,40 @@
 import csv
 from queen import Queen
-
 from rock import Rock
 
 class FileLoader:
 
     def __init__(self, filename):
         self.filename = filename
-        self.columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
+        self.columns = {"a": 0,"b": 1,"c": 2,"d": 3,"e": 4,"f": 5, "g": 6,"h": 7}
         self.colors = {"w": 0, "ww": 1, "b": 2, "bb": 3}
 
     def index_of(self, dict, value):
         return list(dict.keys())[list(dict.values()).index(value)]
 
     def load_game(self):
-
         with open(self.filename, "r") as file:
             reader = csv.DictReader(file, delimiter=",")
 
             figures = []
             for row in reader:
-                figures.append((int(row["position"][1]) - 1,self.columns[row["position"][0]] - 1,self.colors[row["rank_color"]]))
+                if row["position"].strip() == "" or row["rank_color"].strip() == "":
+                    continue
+
+                if (
+                    row["position"][0] not in self.columns.keys() or
+                    row["rank_color"] not in self.colors.keys() or
+                    len(row["position"]) > 2 or
+                    not 0 <= (int(row["position"][1]) - 1) < 8 or
+                    (self.columns[row["position"][0]] + (int(row["position"][1]) - 1)) % 2 != 0 or
+                    len([
+                        figure for figure in figures
+                        if figure[0] == (int(row["position"][1]) - 1) and figure[1] == self.columns[row["position"][0]]
+                    ]) > 0                   
+                ):
+                    raise Exception("Špatný formát souboru k načtení")
+
+                figures.append((int(row["position"][1]) - 1, self.columns[row["position"][0]],self.colors[row["rank_color"]]))
         return figures
 
     def save_game(self, board):

@@ -19,6 +19,12 @@ class Game():
     def start(self):
         self._board = self.init_board()
         self._current_possible_moves = self._ml.find_all_possible_moves(self._board, player_on_turn=self._player_on_turn)
+
+        if len(self._current_possible_moves) == 0:
+            print("Načtená hra je ukončená, načítám základní rozložení")
+            self._board = self.load_default_board
+            self._current_possible_moves = self._ml.find_all_possible_moves(self._board, player_on_turn=self._player_on_turn)
+
         print("zadávej pozice ve formátu např. 'a3'")
         while not self._game_over:
             self.draw()
@@ -156,6 +162,11 @@ class Game():
             except FileNotFoundError:
                 print("Soubor nenalezen :(")
                 return self.load_default_board()
+            except Exception as e:
+                print(e)
+                print("načítám základní rozložení")
+                return self.load_default_board()
+
         else:
             return self.load_default_board()
 
