@@ -1,10 +1,13 @@
+import random
+from time import sleep
+from turtle import position
 from graphics import Graphics
 from move_logic import MoveLogic
 from rock import Rock
 from queen import Queen
 import csv
 from file_loader import FileLoader
-from anytree import Node, RenderTree, ContStyle, findall, find
+from anytree import Node, RenderTree, ContStyle, findall, find, Walker
 
 class Game():
 
@@ -17,6 +20,7 @@ class Game():
         self._current_possible_moves = []
         self._ai = False
         self._ai_color = None
+        self._ai_selected_move = None
 
     def start(self):
         self._board = self.init_board()
@@ -39,17 +43,24 @@ class Game():
         if not self._ai:
             print("Na řadě je hráč s " + ("křížky" if self._player_on_turn == 1 else "kolečky"))
 
-        self.require_player_to_highlight_figure()
+        if self._ai and self._player_on_turn == self._ai_color:
+            self.require_ai_to_highlight_figure()
+        else:
+            self.require_player_to_highlight_figure()
                 
         # pro debug
-        print("----------------- Aktuální možné tahy -----------------")
-        for move in self._current_possible_moves:
-            print(RenderTree(move, style=ContStyle()))
-        print("-------------------------------------------------------")
+        # print("----------------- Aktuální možné tahy -----------------")
+        # for move in self._current_possible_moves:
+        #     print(RenderTree(move, style=ContStyle()))
+        # print("-------------------------------------------------------")
 
         self.draw()
-        self.require_player_to_move()
-
+        if self._ai and self._player_on_turn == self._ai_color:
+            self.require_ai_to_move()
+        else:
+            self.require_player_to_move()
+        self.draw()
+        
         if self._player_on_turn == 0:
             self._player_on_turn = 1
         else:
@@ -113,6 +124,31 @@ class Game():
             # tady se vybere Node ze spojového stromu který je potomkem pozice highlighted figury
             # a bude obsahovat buďto validní tah nebo zprávu proč je tah špatný,
             # pokud Node ve stromu neexistuje je tah mimo dosah
+    
+    def require_ai_to_move(self):
+        while True:
+            sleep(2)
+            possible_moves = list(self._ai_selected_move.leaves)
+            possible_moves.sort(key=lambda node: node.depth, reverse=True) # seřadí konce tahů podle hloubky
+            possible_moves = list(filter(
+                lambda node: node.depth == possible_moves[0].depth, 
+                possible_moves
+            )) # vezme ty nejdelší a z nich náhodně vybere
+
+            w = Walker()
+            path = w.walk(self._ai_selected_move, possible_moves[random.randint(0, len(possible_moves) - 1)])
+            node_to_move = path[2][0]
+            position_to_move = node_to_move.position
+            self._highlighted.move(position_to_move[0], position_to_move[1], self._board)
+
+            # pokud po tahu následuje další tah
+            if not node_to_move.is_leaf:
+                self._ai_selected_move = node_to_move # useknutí předchozího tahu ze stromu
+                self.draw()
+                continue      
+            else:
+                self._highlighted = None
+                return
 
     def require_player_to_highlight_figure(self):
         columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
@@ -147,6 +183,17 @@ class Game():
 
             print("S touhle figurkou se nedá táhnout.")
 
+    def require_ai_to_highlight_figure(self):
+        self._current_possible_moves.sort(key=lambda node: node.height, reverse=True) # seřadí figurky s tahy podle max počtu skoků
+        self._current_possible_moves = list(filter(
+            lambda node: node.height == self._current_possible_moves[0].height, 
+            self._current_possible_moves
+        )) # vezme ty nejvyšší a z nich náhodně vybere
+
+        self._ai_selected_move = self._current_possible_moves[random.randint(0, len(self._current_possible_moves) - 1)]
+        (x, y) = self._ai_selected_move.position
+
+        self._highlighted = self._board[x][y]
 
     def draw(self):
         Graphics.draw(self._board, self._highlighted, list(map(lambda node: node.position, self._current_possible_moves)))
@@ -200,7 +247,7 @@ class Game():
                 if self._ai == 1:
                     while True:
                         try:
-                            self._ai_color = int(input("0 -> hrát za kolečka | 1 -> hrát za křížky: "))
+                            self._ai_color = int(input("0 -> hrát za křížky | 1 -> hrát za kolečka: "))
                             if self._ai_color == 0 or self._ai_color == 1:
                                 return
                         except:

@@ -48,4 +48,4 @@ class FileLoader:
                         type = "w" if board[i][j]._color == 0 else "b"
                         if isinstance(board[i][j], Queen):
                             type += type
-                        writer.writerow({"position": self.index_of(self.columns, j+1) + str(i+1), "rank_color": type})
+                        writer.writerow({"position": self.index_of(self.columns, j) + str(i+1), "rank_color": type})
