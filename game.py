@@ -15,9 +15,12 @@ class Game():
         self._highlighted = None
         self._player_on_turn = 0
         self._current_possible_moves = []
+        self._ai = False
+        self._ai_color = None
 
     def start(self):
         self._board = self.init_board()
+        self.play_vs_ai_prompt()
         self._current_possible_moves = self._ml.find_all_possible_moves(self._board, player_on_turn=self._player_on_turn)
 
         if len(self._current_possible_moves) == 0:
@@ -33,10 +36,8 @@ class Game():
         print("Vyhrál hráč s " + ("křížky" if self._player_on_turn == 0 else "kolečky"))
 
     def update(self):
-        if self._player_on_turn == 0:
-            print("Na řadě je hráč s kolečky")
-        else:
-            print("Na řadě je hráč s křížky")
+        if not self._ai:
+            print("Na řadě je hráč s " + ("křížky" if self._player_on_turn == 1 else "kolečky"))
 
         self.require_player_to_highlight_figure()
                 
@@ -191,3 +192,20 @@ class Game():
             for j in range(4):
                 board[i][j * 2 + i % 2] = Rock(0 if i < 3 else 1)
         return board
+
+    def play_vs_ai_prompt(self):
+        while True:
+            try:
+                self._ai = int(input("0 -> hra mezi dvěma hráči | 1 -> hra proti AI: "))
+                if self._ai == 1:
+                    while True:
+                        try:
+                            self._ai_color = int(input("0 -> hrát za kolečka | 1 -> hrát za křížky: "))
+                            if self._ai_color == 0 or self._ai_color == 1:
+                                return
+                        except:
+                            print("zadej číslo 0 nebo 1")
+                elif self._ai == 0:
+                    return
+            except:
+                print("zadej číslo 0 nebo 1")
