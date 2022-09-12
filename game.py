@@ -115,7 +115,7 @@ class Game():
             
             # pokud nalezne move s pozicí highlighted figury
             position_to_move = find(current_move, lambda node: node.position == (x-1, y-1), maxlevel=2)
-            if position_to_move:
+            if position_to_move and x - 1 != current_move.position[0]:
                 self._highlighted.move(x - 1, y - 1, self._board)
                 # pokud po tahu následuje další tah
                 if not position_to_move.is_leaf:

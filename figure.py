@@ -25,7 +25,6 @@ class Figure(ABC):
 
     # projedeme diagonálu tahu a smažeme figurku, která na ní byla
     def delete_jumped_figures(self, x, y, previous_x, previous_y, board):
-        print(x, y, previous_x, previous_y)
         (dir_x, dir_y) = (int((x-previous_x)/abs(x-previous_x)), int((y-previous_y)/abs(y-previous_y)))
         position_x = previous_x + dir_x
         position_y = previous_y + dir_y
