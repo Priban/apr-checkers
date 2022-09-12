@@ -32,7 +32,7 @@ class Game():
             self._board = self.load_default_board
             self._current_possible_moves = self._ml.find_all_possible_moves(self._board, player_on_turn=self._player_on_turn)
 
-        print("zadávej pozice ve formátu např. 'a3'")
+        print("Zadávej pozice ve formátu např. 'a3'")
         while not self._game_over:
             self.draw()
             self.update()
@@ -49,10 +49,10 @@ class Game():
             self.require_player_to_highlight_figure()
                 
         # pro debug
-        print("----------------- Aktuální možné tahy -----------------")
-        for move in self._current_possible_moves:
-            print(RenderTree(move, style=ContStyle()))
-        print("-------------------------------------------------------")
+        # print("----------------- Aktuální možné tahy -----------------")
+        # for move in self._current_possible_moves:
+        #     print(RenderTree(move, style=ContStyle()))
+        # print("-------------------------------------------------------")
 
         self.draw()
         if self._ai == 2 or (self._ai == 1 and self._player_on_turn == self._ai_color):
@@ -93,10 +93,10 @@ class Game():
                 current_move = move
                 
         while True:
-            coords = list(input("táhni: "))
+            coords = list(input("Táhni: "))
 
             if coords[0] not in columns:
-                print("souřadnice jsou od a do h")
+                print("Souřadnice jsou od a do h")
                 continue
 
             coords[0] = columns[coords[0]]
@@ -106,11 +106,11 @@ class Game():
             try:
                 (x, y) = list(map(lambda c: int(c), coords))
             except ValueError:
-                print("špatný formát souřadnic")
+                print("Špatný formát souřadnic")
                 continue
 
             if x > 8 or y > 8 or x < 1 or y < 1:
-                print("souřadnice jsou od 1 do 8")
+                print("Souřadnice jsou od 1 do 8")
                 continue
             
             # pokud nalezne move s pozicí highlighted figury
@@ -126,7 +126,7 @@ class Game():
                     return
 
 
-            print("Sem táhnout nemůžeš, táhni znova.")
+            print("Sem táhnout nemůžeš, táhni znovu")
 
             # tady se vybere Node ze spojového stromu který je potomkem pozice highlighted figury
             # a bude obsahovat buďto validní tah nebo zprávu proč je tah špatný,
@@ -159,10 +159,10 @@ class Game():
     def require_player_to_highlight_figure(self):
         columns = {"a": 1,"b": 2,"c": 3,"d": 4,"e": 5,"f": 6, "g": 7,"h": 8}
         while True:
-            coords = list(input("vyber si figurku: "))
+            coords = list(input("Vyber si figurku: "))
 
             if coords[0] not in columns:
-                print("souřadnice jsou od a do h")
+                print("Souřadnice jsou od a do h")
                 continue
 
             coords[0] = columns[coords[0]]
@@ -171,15 +171,15 @@ class Game():
             try:
                 (x, y) = list(map(lambda c: int(c), coords))
             except ValueError:
-                print("špatný formát souřadnic")
+                print("Špatný formát souřadnic")
                 continue
 
             if x > 8 or y > 8 or x < 1 or y < 1:
-                print("souřadnice jsou od 1 do 8")
+                print("Souřadnice jsou od 1 do 8")
                 continue
 
             if self._board[x - 1][y - 1] == None:
-                print("na tomto políčku není žádná figurka")
+                print("Na tomto políčku není žádná figurka")
                 continue
 
             for move in self._current_possible_moves:
@@ -218,7 +218,7 @@ class Game():
                 return self.load_default_board()
             except Exception as e:
                 print(e)
-                print("načítám základní rozložení")
+                print("Načítám základní rozložení")
                 return self.load_default_board()
 
         else:
@@ -257,8 +257,8 @@ class Game():
                             if self._ai_color == 0 or self._ai_color == 1:
                                 return
                         except:
-                            print("zadej číslo 0 nebo 1")
+                            print("Zadej číslo 0 nebo 1")
                 elif self._ai == 0 or self._ai == 2:
                     return
             except:
-                print("zadej číslo 0, 1 nebo 2")
+                print("Zadej číslo 0, 1 nebo 2")
