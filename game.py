@@ -59,8 +59,16 @@ class Game():
             self.require_ai_to_move()
         else:
             self.require_player_to_move()
+
+        if isinstance(self._highlighted, Rock):
+            hcolor = self._highlighted._color
+            (x, y) = self._highlighted.get_position(self._board)       
+            if (hcolor == 0 and x == 7) or (hcolor == 1 and x == 0):
+                self._board[x][y] = Queen(hcolor)
+
+        self._highlighted = None
         self.draw()
-        
+
         if self._player_on_turn == 0:
             self._player_on_turn = 1
         else:
@@ -115,7 +123,6 @@ class Game():
                     self.draw()
                     continue      
                 else:
-                    self._highlighted = None
                     return
 
 
@@ -147,7 +154,6 @@ class Game():
                 self.draw()
                 continue      
             else:
-                self._highlighted = None
                 return
 
     def require_player_to_highlight_figure(self):

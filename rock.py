@@ -35,6 +35,3 @@ class Rock(Figure):
                 return "Mimo dosah"
 
         return 1
-
-    def promote_to_queen(self):
-        pass
