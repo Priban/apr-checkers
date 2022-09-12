@@ -43,19 +43,19 @@ class Game():
         if not self._ai:
             print("Na řadě je hráč s " + ("křížky" if self._player_on_turn == 1 else "kolečky"))
 
-        if self._ai and self._player_on_turn == self._ai_color:
+        if self._ai == 2 or (self._ai == 1 and self._player_on_turn == self._ai_color):
             self.require_ai_to_highlight_figure()
         else:
             self.require_player_to_highlight_figure()
                 
         # pro debug
-        # print("----------------- Aktuální možné tahy -----------------")
-        # for move in self._current_possible_moves:
-        #     print(RenderTree(move, style=ContStyle()))
-        # print("-------------------------------------------------------")
+        print("----------------- Aktuální možné tahy -----------------")
+        for move in self._current_possible_moves:
+            print(RenderTree(move, style=ContStyle()))
+        print("-------------------------------------------------------")
 
         self.draw()
-        if self._ai and self._player_on_turn == self._ai_color:
+        if self._ai == 2 or (self._ai == 1 and self._player_on_turn == self._ai_color):
             self.require_ai_to_move()
         else:
             self.require_player_to_move()
@@ -249,7 +249,7 @@ class Game():
     def play_vs_ai_prompt(self):
         while True:
             try:
-                self._ai = int(input("0 -> hra mezi dvěma hráči | 1 -> hra proti AI: "))
+                self._ai = int(input("0 -> hra mezi dvěma hráči | 1 -> hra proti AI | 2 -> AI vs AI: "))
                 if self._ai == 1:
                     while True:
                         try:
@@ -258,7 +258,7 @@ class Game():
                                 return
                         except:
                             print("zadej číslo 0 nebo 1")
-                elif self._ai == 0:
+                elif self._ai == 0 or self._ai == 2:
                     return
             except:
-                print("zadej číslo 0 nebo 1")
+                print("zadej číslo 0, 1 nebo 2")

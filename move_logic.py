@@ -1,6 +1,7 @@
 from anytree import Node, RenderTree, ContStyle, findall
 from queen import Queen
 from rock import Rock
+from copy import deepcopy
 
 # tahy budou v poli které se vygeneruje při začátku kola hráče,
 # vyfiltrují se ty, které nejsou platné (např. existuje jeden nebo více kde dochází k braní)
@@ -40,7 +41,10 @@ class MoveLogic():
                     else:
                         move = Node(pos, parent=moves, position=pos, jump=False)
                 elif validation == 2: # pokud posuzovaný tah je skokem, pokračuje rekurze dál
-                    move = self.find_moves_of_figure(board, figure, pos, moves, True)
+                    board_copy = deepcopy(board)
+                    figure = board_copy[position[0]][position[1]]
+                    figure.move(i, j, board_copy)
+                    move = self.find_moves_of_figure(board_copy, figure, pos, moves, True)
                 else: # nevalidní tah
                     ...
                     # move = Node(pos, parent=moves, position=pos, valid=0, message=validation)
