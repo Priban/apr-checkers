@@ -1,6 +1,7 @@
 from termcolor import colored
 from rock import Rock
 from queen import Queen
+import os
 
 class Graphics:
 
@@ -11,6 +12,7 @@ class Graphics:
 
     @classmethod
     def draw(self, grid, highlighted, possible_moves):
+        os.system("clear")
         print("    a b c d e f g h")
         print("  -------------------")
 
